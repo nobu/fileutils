@@ -2037,17 +2037,11 @@ module FileUtils
       fu_output_message "touch #{nocreate ? '-c ' : ''}#{t ? t.strftime('-t %Y%m%d%H%M.%S ') : ''}#{list.join ' '}"
     end
     return if noop
+    mode = IO::RDWR | IO::BINARY
+    mode |= IO::CREAT unless nocreate
     list.each do |path|
-      created = nocreate
-      begin
-        File.utime(t, t, path)
-      rescue Errno::ENOENT
-        raise if created
-        File.open(path, 'a') {
-          ;
-        }
-        created = true
-        retry if t
+      File.open(path, mode) do |f|
+        File.utime(t, t, f)
       end
     end
   end
