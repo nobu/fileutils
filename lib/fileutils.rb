@@ -1715,7 +1715,7 @@ module FileUtils
           when "x"
             mask | 0111
           when "X"
-            if path.directory?
+            if op == '+' and (path.directory? or (path.mode & 0111).nonzero?)
               mask | 0111
             else
               mask

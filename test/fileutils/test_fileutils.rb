@@ -1448,6 +1448,8 @@ class TestFileUtils < Test::Unit::TestCase
     assert_filemode 06500, 'tmp/k'
     install 'tmp/a', 'tmp/l', :mode => "o+X"
     assert_equal_filemode 'tmp/a', 'tmp/l'
+    install 'tmp/f', 'tmp/m', :mode => "g+X" # 0700
+    assert_filemode 0710, 'tmp/m'
   end if have_file_perm?
 
   def test_chmod
@@ -1549,9 +1551,9 @@ class TestFileUtils < Test::Unit::TestCase
     assert_filemode 0700, 'tmp/dir/dir/file', mask: 0777
     chmod_R "u=xr,g+X,o=", 'tmp/dir'
     assert_filemode 0510, 'tmp/dir', mask: 0777
-    assert_filemode 0500, 'tmp/dir/file', mask: 0777
+    assert_filemode 0510, 'tmp/dir/file', mask: 0777
     assert_filemode 0510, 'tmp/dir/dir', mask: 0777
-    assert_filemode 0500, 'tmp/dir/dir/file', mask: 0777
+    assert_filemode 0510, 'tmp/dir/dir/file', mask: 0777
     chmod_R 0700, 'tmp/dir'   # to remove
   end if have_file_perm?
 
